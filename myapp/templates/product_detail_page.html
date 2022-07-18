@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Product Details |
+{% endblock title %}
+
+
+{% block body %}
+<div class="container">
+    <div class="row ">
+        <div class="col-sm-12 col-md-12 col-lg-12 mtb_30">
+            <!-- =====  BANNER STRAT  ===== -->
+            <div class="breadcrumb ptb_20">
+                <h1>Product Details</h1>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/shop/">Products</a></li>
+                    <li class="active">Product Details</li>
+                </ul>
+            </div>
+            <!-- =====  BREADCRUMB END===== -->
+            <div class="row mt_10 ">
+                <div class="col-md-6">
+                    <div><a class="thumbnails"> <img data-name="product_image" src="{{get_product.image.url}}"
+                                alt="" /></a></div>
+                    <div id="product-thumbnail" class="owl-carousel">
+                        <div class="item">
+                            <div class="image-additional"><a class="thumbnail" href="{{get_product.image1.url}}"
+                                    data-fancybox="group1"> <img src="{{get_product.image1.url}}" alt="" /></a></div>
+                        </div>
+                        <div class="item">
+                            <div class="image-additional"><a class="thumbnail" href="{{get_product.image2.url}}"
+                                    data-fancybox="group1"> <img src="{{get_product.image2.url}}" alt="" /></a></div>
+                        </div>
+                        <div class="item">
+                            <div class="image-additional"><a class="thumbnail" href="{{get_product.image3.url}}"
+                                    data-fancybox="group1"> <img src="{{get_product.image3.url}}" alt="" /></a></div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-6 prodetail caption product-thumb">
+                    <h4 data-name="product_name" class="product-name"><a href="#"
+                            title="Casual Shirt With Ruffle Hem">{{get_product.name}}</a></h4>
+                    <div class="rating">    
+                        <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i
+                                class="fa fa-star fa-stack-1x"></i></span>
+                        <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i
+                                class="fa fa-star fa-stack-1x"></i></span>
+                        <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i
+                                class="fa fa-star fa-stack-1x"></i></span>
+                        <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i
+                                class="fa fa-star fa-stack-1x"></i></span>
+                        <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i
+                                class="fa fa-star fa-stack-x"></i></span>
+                    </div>
+                    <span class="price mb_20"><span class="amount"><span
+                                class="currencySymbol">₹</span>{{get_product.sell_price}}</span>
+                    </span>
+                    <hr>
+                    <ul class="list-unstyled product_info mtb_20">
+                        <li>
+                            <label>Brand :  </label>
+                            <span> {{get_product.s_cate}}</span>
+                        </li>
+
+                        <li>
+                            <label>Status : </label>
+                            <span> {{get_product.status}}</span>
+                        </li>
+                    </ul>
+                    <hr>
+                    <p class="product-desc mtb_30"> {{get_product.description_para}}</p>
+                    <p class="product-desc mtb_30"> {{get_product.description_para1}}</p>
+                    <p class="product-desc mtb_30"> {{get_product.description_para2}}</p>
+                    <p class="product-desc mtb_30"> {{get_product.description_para3}}</p>
+                    <p class="product-desc mtb_30"> {{get_product.description_para4}}</p>
+                    <div id="product">
+                        <div class="button-group mt_30">
+                            <a class="add-to-cart" href="{% url 'add_cart' get_product.id %}"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="exTab5" class="mtb_30">
+                        <ul class="nav nav-tabs">
+                            <li><a href="#1c" data-toggle="tab">Reviews</a></li>
+                        </ul>
+                        <div class="tab-content ">
+                            <div class="tab-pane" id="1c">
+                                <form class="form-horizontal" method="POST"> 
+                                  {% csrf_token %}
+                                    <div id="review"></div>
+                                    <h4 class="mt_20 mb_30">Write a review</h4>
+                                    <div class="form-group required">
+                                        <div class="col-sm-12">
+                                            <label class="control-label" for="input-name">Your Name</label>
+                                            <input name="name" value="" id="input-name" class="form-control"
+                                                type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                        <div class="col-sm-12">
+                                            <label class="control-label" for="input-review">Your Review</label>
+                                            <textarea name="text" rows="5" id="input-review"
+                                                class="form-control"></textarea>    
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                      <div class="col-md-12" >
+                                        <label class="control-label">Rating</label>
+                                        <div class="control-label" style="margin-left: 10px !important;">
+                                          <input name="rating" value="1" type="radio"> <span>Bad</span>
+                                          <input name="rating" value="2" type="radio"> <span>Average</span>
+                                          <input name="rating" value="3" type="radio"> <span>Good</span>
+                                         <input name="rating" value="4" type="radio"> <span>Excellent</span>
+                                      </div>
+                                    </div>
+                                      <div class="col-md-12">
+                                        <div class="buttons pull-right">
+                                          <button type="submit" class="btn btn-md btn-link">Continue</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="brand_carouse" class="ptb_30 text-center">
+        <div class="type-01">
+            <div class="heading-part mb_20 ">
+                <h2 class="main_title">Brand Logo</h2>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="brand owl-carousel ptb_20">
+
+
+                        {% for fm in all_scat %}
+                        <div class="item text-center"> <a href="#"><img src="{{fm.image.url}}" alt="Disney"
+                                    class="img-responsive" /></a> </div>
+                        {% endfor %}
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

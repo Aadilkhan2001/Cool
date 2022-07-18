@@ -1,0 +1,451 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+
+<!-- Mirrored from html.lionode.com/cools/index.html/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 21 Sep 2021 05:51:54 GMT -->
+
+<head>
+  <!-- =====  BASIC PAGE NEEDS  ===== -->
+  <meta charset="utf-8">
+  <title>
+
+    {% block title %}
+
+    {% endblock title %}
+
+  </title>
+ 
+  <!-- =====  SEO MATE  ===== -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="distribution" content="global">
+  <meta name="revisit-after" content="2 Days">
+  <meta name="robots" content="ALL">
+  <meta name="rating" content="8 YEARS">
+  <meta name="Language" content="en-us">
+  <meta name="GOOGLEBOT" content="NOARCHIVE">
+  <!-- =====  MOBILE SPECIFICATION  ===== -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width">
+  <!-- =====  CSS  ===== -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}" />
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+    integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/magnific-popup.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/owl.carousel.css' %}">
+  <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
+  <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.html' %}">
+  <link rel="apple-touch-icon" sizes="72x72" href="{% static 'images/apple-touch-icon-72x72.html' %}">
+  <link rel="apple-touch-icon" sizes="114x114" href="{% static 'images/apple-touch-icon-114x114.html' %}">
+
+</head>
+
+<body>
+  <!-- =====  LODER  ===== -->
+  <div class="loder"></div>
+  <div class="wrapper">
+    <div id="subscribe-me" class="modal animated fade in" role="dialog" data-keyboard="true" tabindex="-1">
+      <div class="newsletter-popup">
+        <img class="offer" src="{% static 'images/newsbg.jpg' %}" alt="offer">
+        <div class="newsletter-popup-static newsletter-popup-top">
+          <div class="popup-text">
+            <div class="popup-title">50% <span>off</span></div>
+            <div class="popup-desc">
+              <div>Sign up and get 50% off your next Order</div>
+            </div>
+          </div>
+          <form onsubmit="return  validatpopupemail();" method="post">
+            <div class="form-group required">
+              <input type="email" name="email-popup" id="email-popup" placeholder="Enter Your Email"
+                class="form-control input-lg" required />
+              <button type="submit" class="btn btn-default btn-lg" id="email-popup-submit">Subscribe</button>
+              <label class="checkme">
+                <input type="checkbox" value="" id="checkme" />Dont show again</label>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- =====  HEADER START  ===== -->
+    <header id="header">
+      <div class="header-top">
+        <div class="container">
+          <div class="row">
+
+            <div class="col-lm-12">
+              <ul class="header-top-right text-right">
+                {% if request.user.is_authenticated %}
+                <li class="dropdown"> <span class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="true" role="button"><i class="fas fa-user-circle"></i>{{request.user}}<span class="caret"></span>
+                  </span>
+                  <ul class="dropdown-menu" style="left:-110px !important;" aria-labelledby="dropdownMenu1">
+                    
+                    <li><a href="/edit/">Edit Profile</a></li>
+                    <li><a href="/changepass/">Change Password</a></li>
+                    <li><a href="{% url 'password_reset' %}">Reset Password</a></li>
+                    <li><a href="/logout/">logout</a></li>   
+                  </ul>
+                  {% else %}
+                  <li> <i class="fa fa-user-plus" aria-hidden="true"></i> <a href="/register/">Sign Up</a></li>
+                  <li><i class="fa fa-sign-in" aria-hidden="true"></i> <a href="/login/">login</a></li>
+                  {% endif %}
+
+                </li>
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="header">
+        <div class="container">
+          <nav class="navbar">
+            <div class="navbar-header mtb_20"> <a class="navbar-brand" href="/"> <img alt="Coolsd"
+                  src="{% static 'images/logo.png' %}"> </a> </div>
+            <div class="header-right pull-right mtb_50">
+              <button class="navbar-toggle pull-left" type="button" data-toggle="collapse"
+                data-target=".js-navbar-collapse"> <span class="i-bar"><i class="fa fa-bars"></i></span></button>
+              <div class="shopping-icon">
+                <div class="cart-item " data-target="#cart-dropdown" data-toggle="collapse" aria-expanded="true"
+                  role="button">Item's :
+
+                  {% if cart_count %}
+                  <span class="cart-qty">{{cart_count}}</span>
+                  {% else %}
+                  <span class="cart-qty">0</span>
+                  {% endif %}
+
+                </div>
+                <div id="cart-dropdown" class="cart-menu collapse">
+                  <ul>
+                    <li>
+                      <table class="table table-striped ">
+                        <tbody>
+                        
+                          {% if cart_items %}
+
+
+                          {% for fm in cart_items %}
+                          <tr>
+                            <td class="text-center"><a href="{% url 'proddata' fm.id %}"><img src="{{fm.product.image.url}}" alt="iPod Classic"
+                                  title="iPod Classic"></a>
+                             </td>
+                            <form method="GET" action="{% url 'update_quantity' fm.id %}">
+                            <td class="text-center">
+                              <a href="{% url 'proddata' fm.id %}">{{fm.product|truncatewords:3}}</a>
+                              <div class="product product-name">Unit Price :  ₹{{fm.product.sell_price}}</div>
+                                <input class="cart-qty" name="quantity" min="1" value="{{fm.quantity}}"
+                                type="number">
+                                <button class="btn" type="submit" title="" data-toggle="tooltip"
+                                                data-original-title="Update"><i class="fa fa-refresh"></i></button>
+                              </div>
+                              <div class="product product-name">Total :  ₹{{fm.product_total}}</div>
+                          
+                            </td>
+                            </form>
+                            <td class="text-right"><a class="close-cart" href="{% url 'remove_cart' fm.id %}"><i class="fa fa-times-circle"></i></a></td>
+                          </tr>
+                   
+                          {% endfor %}
+
+                          {% else %}
+                    
+                          <tr>
+
+                            <td class="text-center"><a href="#"><img src="{% static '/images/no.png' %}"
+                                  alt="iPod Classic" title="iPod Classic"></a></td>
+
+                          </tr>
+             
+                          {% endif %}
+
+
+                        </tbody>
+                      </table>
+                    </li>
+
+                    {% if cart_items %}
+
+                    <li>
+                      <table class="table">
+                        <tbody>
+                          <tr>
+                            <td class="text-right"><strong>Sub-Total</strong></td>
+                            <td class="text-right">₹{{sub}}</td>
+                          </tr>
+                          <tr>
+                            <td class="text-right"><strong>Ship Charge </strong></td>
+                            <td class="text-right">₹{{ship}}</td>
+                          </tr>
+                          <tr>
+                            <td class="text-right"><strong>GST </strong></td>
+                            <td class="text-right">₹{{gst}}</td>
+                          </tr>
+                          <tr>
+                            <td class="text-right"><strong>Total</strong></td>
+                            <td class="text-right">₹{{grand}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </li>
+                    <li>
+                      <form action="/cart/">
+                        <input class="btn pull-left mt_10" value="View cart" type="submit">
+                      </form>
+                      <form action="/checkout/">
+                        <input class="btn pull-right mt_10" value="Checkout" type="submit">
+                      </form>
+                    </li>
+                    {% else %}
+                    <li>
+                      <table class="table">
+                        <tr>
+                          <td class="text-center">
+                            <h6>Your Cart Is Empty</h6>
+                          </td>
+                        </tr>
+                      </table>
+                    </li>
+
+                    <li>
+                      <form action="/shop/">
+                        <input class="btn btn-block" value="Shop Now" type="submit">
+                      </form>
+
+                    </li>
+
+                    {% endif %}
+
+                  </ul>
+                </div>
+              </div>
+              <div class="main-search pull-right">
+                <div class="search-overlay">
+                  <!-- Close Icon -->
+                  <a href="javascript:void(0)" class="search-overlay-close"></a>
+                  <!-- End Close Icon -->
+                  <div class="container">
+                    <!-- Search Form -->
+                    <form role="search" id="searchform" action="http://html.lionode.com/search" method="get">
+                      <label class="h5 normal search-input-label">Enter keywords To Search Entire Store</label>
+                      <input value="" name="q" placeholder="Search here..." type="search">
+                      <button type="submit"></button>
+                    </form>
+                    <!-- End Search Form -->
+                  </div>
+                </div>
+                <div class="header-search"> <a id="search-overlay-btn"></a> </div>
+              </div>
+            </div>
+            <div class="collapse navbar-collapse js-navbar-collapse pull-right">
+              <ul id="menu" class="nav navbar-nav">
+                <li> <a href="/">Home</a></li>
+                <li> <a href="/shop/">Shop</a></li>
+                <li class="dropdown mega-dropdown"> <a href="#" class="dropdown-toggle"
+                    data-toggle="dropdown">Collection </a>
+                  <ul class="dropdown-menu mega-dropdown-menu row">
+                    <li class="col-md-3">
+                      <ul>
+                        <li class="dropdown-header">Our Categories</li>
+                        {% for fm in all_mcat %}
+                        <li><a href="{% url 'filter_mcat' fm.id %}">{{fm.name}}</a></li>
+                        {% endfor %}
+
+
+                      </ul>
+                    </li>
+                    <li class="col-md-3">
+                      <ul>
+                        <li class="dropdown-header">Brands</li>
+
+                        {% for fm in all_scat %}
+                        <li><a href="{% url 'filter_scat' fm.id %}">{{fm.name}}</a></li>
+                        {% endfor %}
+
+                      </ul>
+                    </li>
+
+                    <li class="col-md-6">
+                      <ul>
+                        <li id="myCarousel" class="carousel slide" data-ride="carousel">
+
+                          <div class="mycat owl-carousel ptb_20">
+
+                            {% for fm in all_mcat %}
+                            <div class="item text-center"> <a href="{% url 'filter_mcat' fm.id %}"><img
+                                  style="height:300px;" src="{{fm.image.url}}" alt="Disney"
+                                  class="img-responsive" /></a> </div>
+                            {% endfor %}
+
+
+
+                          </div>
+
+                          <!-- End Carousel Inner -->
+                        </li>
+                        <!-- /.carousel -->
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                
+                
+                <li> <a href="/about/">About us</a></li>
+              </ul>
+            </div>
+            <!-- /.nav-collapse -->
+          </nav>
+        </div>
+      </div>
+    </header>
+    <!-- =====  HEADER END  ===== -->
+    <!-- =====  BANNER STRAT  ===== -->
+    <!-- <div class="banner">
+      <div class="main-banner owl-carousel">
+        <div class="item"><a href="#"><img src="{% static 'images/main_banner1.jpg' %}" alt="Main Banner"
+              class="img-responsive" /></a></div>
+        <div class="item"><a href="#"><img src="{% static 'images/main_banner2.jpg' %}" alt="Main Banner"
+              class="img-responsive" /></a></div>
+      </div>
+    </div> -->
+    <!-- =====  BANNER END  ===== -->
+    <div class="row">
+    </div>
+    <!-- =====  CONTAINER START  ===== -->
+
+
+    {% block body %}
+     {% endblock body %}
+    
+
+
+    <!-- =====  CONTAINER END  ===== -->
+    <!-- =====  FOOTER START  ===== -->
+    <div class="footer pt_60">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3 footer-block">
+            <div class="content_footercms_right">
+              <div class="footer-contact">
+                <div class="footer-logo mt_20 mb_40"> <a href="/"> <img src="{% static 'images/footer-logo.png' %}"
+                      alt="Cools"> </a> </div>
+                <ul>
+                  <li>B-14 Collins Street West Victoria 2386</li>
+                  <li>(+123) 456 789 - (+024) 666 888</li>
+                  <li>Contact@yourcompany.com</li>
+                </ul>
+                <div class="social_icon">
+                  <ul>
+                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="#"><i class="fa fa-google"></i></a></li>
+                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="#"><i class="fa fa-rss"></i></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2 footer-block">
+            <h6 class="footer-title ptb_20">Glasses</h6>
+            <ul>
+
+              {% for fm in all_mcat %}
+              <li id='my_data'><a href="{% url 'filter_mcat' fm.id %}">{{fm.name}}</a></li>
+              {% endfor %}
+
+
+            </ul>
+          </div>
+          <div class="col-md-2 footer-block">
+            <h6 class="footer-title ptb_20">Brands</h6>
+            <ul>
+
+              {% for fm in all_scat %}
+              <li><a href="{% url 'filter_scat' fm.id %}">{{fm.name}}</a></li>
+              {% endfor %}
+
+
+
+            </ul>
+          </div>
+          <div class="col-md-2 footer-block">
+            <h6 class="footer-title ptb_20">My Account</h6>
+            <ul>
+            
+
+              
+              {% if request.user.is_authenticated %}
+              <li><a href="/edit/">Edit Profile</a></li>
+              <li><a href="/changepass/">Change Password</a></li>
+              <li><a href="{% url 'password_reset' %}">Reset Password</a></li>
+                {% else %}
+                <li><a href="/login/">Login</a></li>
+                <li><a href="/register/">Register</a></li>
+              {% endif %}
+                
+              
+
+
+            </ul>
+          </div>
+
+          
+          <div class="col-md-3">
+            <h6 class="ptb_20">SIGN UP OUR NEWSLETTER</h6>
+            <p class="mt_10 mb_20">For get offers from our favorite brands & get 20% off for next </p>
+            <div class="form-group">
+              <input class="mb_20" type="text" placeholder="Enter Your Email Address">
+              <button class="btn">Subscribe</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom mt_60 ptb_10">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="copyright-part">@ 2018 All Rights Reserved Cools</div>
+            </div>
+            <div class="col-sm-6">
+              <div class="payment-icon text-right">
+                <ul>
+                  <li><i class="fa fa-cc-paypal "></i></li>
+                  <li><i class="fa fa-cc-stripe"></i></li>
+                  <li><i class="fa fa-cc-visa"></i></li>
+                  <li><i class="fa fa-cc-discover"></i></li>
+                  <li><i class="fa fa-cc-mastercard"></i></li>
+                  <li><i class="fa fa-cc-amex"></i></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- =====  FOOTER END  ===== -->
+  </div>
+  <a id="scrollup">Scroll</a>
+  <script src="{% static 'js/jQuery_v3.1.1.min.js' %}"></script>
+  <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/jquery.magnific-popup.js' %}"></script>
+  <script src="{% static 'js/jquery.firstVisitPopup.js' %}"></script>
+  <script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+
+
+<!-- Mirrored from html.lionode.com/cools/index.html/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 21 Sep 2021 05:53:29 GMT -->
+
+</html>

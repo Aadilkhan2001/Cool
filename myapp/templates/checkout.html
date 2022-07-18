@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Checkout |
+{% endblock title %}
+
+
+
+{% block body %}
+
+{% if cart_items %}
+<div class="container">
+  <div class="row ">
+    <div class="col-sm-12 col-md-12 col-lg-12 mtb_30">
+      <!-- =====  BANNER STRAT  ===== -->
+      <div class="breadcrumb ptb_20">
+        <h1>Shopping Cart</h1>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li class="active">Shopping Cart</li>
+        </ul>
+      </div>
+      <!-- =====  BREADCRUMB END===== -->
+      <div class="panel-group mt_20" id="accordion">
+        <div class="panel panel-default  ">
+          <div class="panel-heading">
+            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Step 1:
+                Select Address <i class="fa fa-caret-down"></i></a></h4>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class='text text-center'>
+                    <h1>Adresses</h1>
+                  </div>
+
+
+                  {% if address %}
+
+                  {% for fm in address %}
+                  <div class="text text-center">
+                    <div class="panel panel-default mtb_10">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">{{fm.first_name}} {{fm.last_name}}</h4>
+                      </div>
+                      <div class="panel-body">
+                        <div class='row'>
+                          <div clas="col-sm-6">
+                            <form  method="POST">
+                              {% csrf_token %}
+                            <div class="radio">
+                              <label>
+                                <input type="radio" value="{{fm.id}}" name="customer">
+                                {{fm.ccname}},{{fm.cc_add}},{{fm.add1}},{{fm.add2}},{{fm.city}}-{{fm.zip_code}},{{fm.state}},{{fm.country}}.</label>
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+                    
+                    </div>
+
+                  </div>
+                  {% endfor %}
+
+                  {% else %}
+                  <div class="text text-center">
+                    <div class="panel panel-default mtb_10">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">Please Enter Adress</h4>
+                      </div>
+                      <div class="panel-body">
+                        <form action="/address/" method="POST">
+                          {% csrf_token %}
+                        {% for fm in form1 %}
+                        <div class="text-center">
+                            <div class="form-group">
+                              {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <button type="submit" class="form-control btn btn-block">Add Address</button>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                      </div>
+
+
+
+                    </div>
+
+                  </div>
+
+                  {% endif %}
+
+                  
+                  {% if address %}
+                  <div class="text text-center">
+                    <a class="btn mtb_10" href="/address/">Add New Adress</a>
+                  </div>
+                    
+                  {% endif %}
+                    
+                  <div class="text text-center">
+                    <a class="btn mtb_10" data-toggle="collapse" data-parent="#accordion"
+                      href="#collapsesix">continue</a>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default ">
+          <div class="panel-heading">
+            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapsesix">Step 2:
+                Confirm Order <i class="fa fa-caret-down"></i></a> </h4>
+          </div>
+          <div id="collapsesix" class="panel-collapse collapse">
+            <div class="panel-body">
+             <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left">Image</td>
+                      <td class="text-left">Product Name</td>
+                      <td class="text-right">Unit Price</td>
+                      <td class="text-right">Quantity</td>
+                      <td class="text-right">Total</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                    {% for fm in cart_items %}
+                    <tr>
+                      <td class="text-center"><a href="{{fm.product.image.url}}"><img style="height: 75px;width: 75px;" src="{{fm.product.image.url}}" alt="alt"></a>
+                      </td>
+                      <td class="text-left">{{fm.product}}</td>
+                      <td class="text-right">₹{{fm.product.sell_price}}</td>
+                      <td class="text-right">{{fm.quantity}}</td>
+                      <td class="text-right">₹{{fm.product_total}}</td>
+                    </tr>
+                    {% endfor %}
+                      
+                    
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td class="text-right" colspan="4"><strong>Sub-Total:</strong></td>
+                      <td class="text-right">{{sub}}</td>
+                    </tr>
+                    <tr>
+                      <td class="text-right" colspan="4"><strong>Gst (10%):</strong></td>
+                      <td class="text-right">{{gst}}</td>
+                    </tr>
+                    <tr>
+                      <td class="text-right" colspan="4"><strong>Flat Shipping Rate:</strong></td>
+                      <td class="text-right">₹70</td>
+                    </tr>
+                    <tr>
+                      <td class="text-right" colspan="4"><strong>Total:</strong></td>
+                      <td class="text-right">{{grand}}</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+           
+              <div class="buttons">
+                <div class="pull-right">
+                  <a class="btn" data-toggle="collapse" data-parent="#accordion" href="#collapsefive">continue</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default ">
+          <div class="panel-heading">
+            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapsefive">Step 3:
+                Payment Method <i class="fa fa-caret-down"></i></a> </h4>
+          </div>
+          <div id="collapsefive" class="panel-collapse collapse">
+            <div class="panel-body">
+              <div class="text text-center">
+                <p>Please select the preferred payment method to use on this order.</p>
+           
+               
+                <button name="cashon" class="btn mtb_20" type="submit">Cash On Delivery</button>
+             
+                <a href="/onlinepay/"  class="btn mtb_20" type="submit">Online Payment </a>
+              </form>
+            
+           
+                  
+              
+              </div>
+              <div class="text text-center">
+                <div class="form-group">
+                <button class="btn mtb_20" type="submit">Confirm Order</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div id="brand_carouse" class="ptb_30 text-center">
+  <div class="type-01">
+    <div class="heading-part mb_20 ">
+      <h2 class="main_title">Brand Logo</h2>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="brand owl-carousel ptb_20">
+
+          {% for fm in all_scat %}
+          <div class="item text-center"> <a href="{% url 'filter_scat' fm.id %}"><img src="{{fm.image.url}}"
+                alt="Disney" class="img-responsive" /></a> </div>
+          {% endfor %}
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% else %}
+
+<div id="brand_carouse" class="ptb_30 text-center">
+  <div class="type-01">
+    <div class="heading-part mb_20 ">
+      <h2 class="main_title">Brand Logo</h2>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="brand owl-carousel ptb_20">
+
+          {% for fm in all_scat %}
+          <div class="item text-center"> <a href="{% url 'filter_scat' fm.id %}"><img src="{{fm.image.url}}"
+                alt="Disney" class="img-responsive" /></a> </div>
+          {% endfor %}
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endif %}
+  
+
+{% endblock body %}

@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+HOME |
+{% endblock title %}
+
+
+{% block body %}
+<div class="banner">
+  <div class="main-banner owl-carousel">
+    <div class="item"><a href="#"><img src="{% static 'images/main_banner1.jpg' %}" alt="Main Banner"
+          class="img-responsive" /></a></div>
+    <div class="item"><a href="#"><img src="{% static 'images/main_banner2.jpg' %}" alt="Main Banner"
+          class="img-responsive" /></a></div>
+  </div>
+</div>
+<div class="container">
+  <div class="row ">
+    <div id="brand_special" class="pt_30 text-center">
+      <div class="type-01">
+        <div class="col-sm-12">
+          <div class="heading-part mb_20 ">
+            <h2 class="main_title">Our Categories</h2>
+          </div>
+          <div class="sunglasses owl-carousel ptb_20">
+            {% for fm in all_mcat %}
+            <div class="item text-center"> <a href="{% url 'filter_mcat' fm.id %}"> <img src="{{fm.image.url}}"
+                  alt="Disney" class="img-responsive" /> </a>
+            </div>
+
+
+            {% endfor %}
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====  SUB BANNER  STRAT ===== -->
+    <div class="cms_banner">
+      <div class="col-xs-5 col-sm-5 col-md-5 mt_30">
+        <div id="subbanner1" class="sub-hover"> <a href="#"><img src="{% static 'images/sub1.jpg' %}" alt="Sub Banner1"
+              class="img-responsive"></a>
+          <div class="bannertext">
+            <h2><span>use code : w48sdc</span><br>highest quality designer frames.</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-7 col-sm-7 col-md-7 mt_30">
+        <div class="row">
+          <div class="col-xs-6 col-sm-6 col-md-6">
+            <div id="subbanner2" class="sub-hover"> <a href="#"><img src="{% static 'images/sub2.jpg' %}"
+                  alt="Sub Banner2" class="img-responsive"></a>
+              <div class="bannertext">
+                <h2>Women<br>Sunglasses</h2>
+                <p class="mt_10">Discover wide range</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-6 col-md-6">
+            <div id="subbanner3" class="sub-hover"> <a href="#"><img src="{% static 'images/sub3.jpg' %}"
+                  alt="Sub Banner3" class="img-responsive"></a>
+              <div class="bannertext">
+                <h2>Men's<br>Sunglasses</h2>
+                <p class="mt_10">Great collection</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- =====  SUB BANNER END  ===== -->
+    <div class="col-sm-12">
+      <!-- =====  PRODUCT TAB  ===== -->
+      <div id="product-tab" class="mt_60">
+        <div class="heading-part mb_20 ">
+          <h2 class="main_title">All Products</h2>
+        </div>
+        <div class="tab-content clearfix box">
+          <div class="tab-pane active" id="nArrivals">
+            <div class="nArrivals owl-carousel">
+
+              {% for fm in all_prod %}
+              <div class="product-grid">
+                <div class="item">
+                  <div class="product-thumb">
+                    <div class="image product-imageblock"> <a href="{% url 'proddata' fm.id %}"><img
+                          data-name="product_image" style="height: 228px;width: 228px;" src="{{fm.image.url}}"
+                          alt="iPod Classic" title="iPod Classic" class="img-responsive"> <img
+                          style="height: 228px;width: 228px;" src="{{fm.image1.url}}" alt="iPod Classic"
+                          title="iPod Classic" class="img-responsive"> </a>
+                      <div class="date-time">
+                        <div class="day"> {{fm.discount}}%</div>
+                        <div class="month">off</div>
+                      </div>
+                    </div>
+                    <div class="caption product-detail text-left">
+
+
+                      <h6 data-name="product_name" class="product-name mt_20"><a href="#"
+                          title="Casual Shirt With Ruffle Hem">{{fm.name}}</a></h6>
+
+                      <span class="price">
+                        <span class="amount"><span class="currencySymbol">Selling Price :
+                            ₹</span>{{fm.sell_price}}</span>
+                      </span>
+
+                      <div class="button-group text-center">
+                       <a class="add-to-cart" href="{% url 'add_cart' fm.id %}"></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+           
+              {% endfor %}
+
+
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+      <!-- =====  PRODUCT TAB  END ===== -->
+      <!-- =====  SUB BANNER  STRAT ===== -->
+
+      <!-- =====  SUB BANNER END  ===== -->
+
+    </div>
+  </div>
+  <div id="brand_carouse" class="mtb_40 text-center">
+    <div class="type-01">
+      <div class="heading-part mb_20 ">
+        <h2 class="main_title">Brand Logo</h2>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="brand owl-carousel ptb_20">
+
+
+            {% for fm in all_scat %}
+            <div class="item text-center"> <a href="{% url 'filter_scat' fm.id %}"><img src="{{fm.image.url}}"
+                  alt="Disney" class="img-responsive" /></a> </div>
+
+            {% endfor %}
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock body %}

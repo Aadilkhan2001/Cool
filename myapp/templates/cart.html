@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Cart |
+{% endblock title %}
+
+
+{% block body %}
+<div class="container">
+    <div class="row ">
+        <div id="column-left" class="col-sm-4 col-md-4 col-lg-3 hidden-xs">
+            <div id="category-menu" class="navbar collapse mb_40">
+                <div class="nav-responsive">
+                    <ul class="nav  main-navigation collapse in">
+                        <li><a href="#">Appliances</a></li>
+                        <li><a href="#">Mobile Phones</a></li>
+                        <li><a href="#">Tablet PC & Accessories</a></li>
+                        <li><a href="#">Consumer Electronics</a></li>
+                        <li><a href="#">Computers & Networking</a></li>
+                        <li><a href="#">Electrical & Tools</a></li>
+                        <li><a href="#">Apparel</a></li>
+                        <li><a href="#">Bags & Shoes</a></li>
+                        <li><a href="#">Toys & Hobbies</a></li>
+                        <li><a href="#">Watches & Jewelry</a></li>
+                        <li><a href="#">Home & Garden</a></li>
+                        <li><a href="#">Health & Beauty</a></li>
+                        <li><a href="#">Outdoors & Sports</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-12 mtb_30">
+            <!-- =====  BANNER STRAT  ===== -->
+            <div class="breadcrumb ptb_20">
+                <h1>Shopping Cart</h1>
+                <ul>
+                    <li><a href="/shop/">Shop</a></li>
+                    <li class="active">Shopping Cart</li>
+                </ul>
+            </div>
+            <!-- =====  BREADCRUMB END===== -->
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+
+                    {% if cart_items %}
+
+                    <thead>
+                        <tr>
+                            <td class="text-center">Image</td>
+                            <td class="text-left">Product Name</td>
+
+                            <td class="text-left">Quantity</td>
+                            <td class="text-right">Unit Price</td>
+                            <td class="text-right">Total</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        {% for fm in cart_items %}
+                        <tr>
+                            <td class="text-center"><a href="#"><img style="height: 75px;width: 75px;"
+                                        src="{{fm.product.image.url}}" alt="iPod Classic" title="iPod Classic"></a></td>
+                            <td class="text-left"><a href="">{{fm.product}}</a></td>
+                            <form method="GET" action="{% url 'update_quantity' fm.id %}">
+                                <td class="text-left">
+                                    <div style="max-width: 200px;" class="input-group btn-block">
+
+                                        <input type="text" class="form-control quantity" size="1"
+                                            value="{{fm.quantity}}" name="quantity">
+
+                                        <span class="input-group-btn">
+                                            <button class="btn" type="submit" title="" data-toggle="tooltip"
+                                                data-original-title="Update"><i class="fa fa-refresh"></i></button>
+
+                                            <a href="{% url 'remove_cart' fm.id %}" class="btn btn-danger" title=""
+                                                data-toggle="tooltip" type="submit" data-original-title="Remove"><i
+                                                    class="fa fa-times-circle"></i></a>
+                                        </span>
+
+
+
+                                    </div>
+                                </td>
+                            </form>
+                            <td class="text-right">₹{{fm.product.sell_price}}</td>
+                            <td class="text-right">₹{{fm.product_total}}</td>
+                        </tr>
+                        {% endfor %}
+
+
+                    </tbody>
+                    {% else %}
+                    <td class="text-center" colspan='5'>
+
+                        <img src="{% static '/images/no.png' %}" alt="iPod Classic" title="iPod Classic"/>
+                   
+                    <div class='text-danger'> Oops!! Your Cart is Empty Shop Now...!! </div>
+                    <div><a href="/shop/" class="btn ">Shop Now</a></div>
+                    </td>
+                    {% endif %}
+
+                </table>
+            </div>
+
+            
+            {% if cart_items %}
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-6">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="text-right"><strong>Sub-Total:</strong></td>
+                                <td class="text-right">{{sub}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><strong>Shipping Charge :</strong></td>
+                                <td class="text-right"> (+) ₹70</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><strong>GST (10%):</strong></td>
+                                <td class="text-right">(+) {{gst}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><strong>Total:</strong></td>
+                                <td class="text-right">{{grand}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <form action="/shop/">
+                <input class="btn pull-left mt_30" type="submit" value="Continue Shopping" />
+            </form>
+            <form action="/checkout/">
+                <input class="btn pull-right mt_30" type="submit" value="Checkout" />
+            </form>
+            {% endif %}
+                
+           
+           
+        </div>
+    </div>
+    <div id="brand_carouse" class="ptb_30 text-center">
+        <div class="type-01">
+            <div class="heading-part mb_20 ">
+                <h2 class="main_title">Brand Logo</h2>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="brand owl-carousel ptb_20">
+
+                        {% for fm in all_scat %}
+                        <div class="item text-center"> <a href="{% url 'filter_scat' fm.id %}"><img
+                                    src="{{fm.image.url}}" alt="Disney" class="img-responsive" /></a> </div>
+                        {% endfor %}
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

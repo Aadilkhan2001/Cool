@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Checkout |
+{% endblock title %}
+
+
+
+{% block body %}
+
+{% if cart_items %}
+<div class="container">
+  <div class="row ">
+    <div class="col-sm-12 col-md-12 col-lg-12 mtb_30">
+      <!-- =====  BANNER STRAT  ===== -->
+      <div class="breadcrumb ptb_20">
+        <h1>Shopping Cart</h1>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li class="active">Shopping Cart</li>
+        </ul>
+      </div>
+      <!-- =====  BREADCRUMB END===== -->
+      <div class="text-center">
+        <h1 >
+          Pay Online
+        </h1>
+    <form action="" method="POST">
+      {% csrf_token %}
+      <div class="text-center">
+        {% for fm in form1 %}
+        <div class="panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">
+            {{fm.first_name}} {{fm.last_name}}
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="radio">
+              <label>
+              <input type="radio" value="{{fm.id}}" name="customer" id="">{{fm.ccname}},{{fm.cc_add}},{{fm.add1}},{{fm.add2}},{{fm.city}}-{{fm.zip_code}},{{fm.state}},{{fm.country}}
+              </label>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div> 
+      <button type="submit">Pay Now</button>
+      <script src="https://checkout.razorpay.com/v1/checkout.js"
+      data-key="rzp_test_0gGp3unTKlboNp"
+      data-amount="{{amount}}"
+      data-currency="INR"
+      data-order_id="{{payment.id}}"
+      data-buttontext="Pay with Razorpay"
+      data-name="Cools"
+      data-description="Sunglasses"
+      data-image="{% static 'images/logo.png' %}"
+      data-prefill.name="PC"
+      data-prefill.email="cool@mail.com"
+      data-theme.color="#f44336">
+    </script>
+    </form>
+       
+      </div>
+    </div>
+  </div>
+</div>
+<div id="brand_carouse" class="ptb_30 text-center">
+  <div class="type-01">
+    <div class="heading-part mb_20 ">
+      <h2 class="main_title">Brand Logo</h2>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="brand owl-carousel ptb_20">
+
+          {% for fm in all_scat %}
+          <div class="item text-center"> <a href="{% url 'filter_scat' fm.id %}"><img src="{{fm.image.url}}"
+                alt="Disney" class="img-responsive" /></a> </div>
+          {% endfor %}
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% else %}
+<div class="container">
+  <div class="row ">
+    <div class="col-sm-12 col-md-12 col-lg-12 mtb_30">
+      <!-- =====  BANNER STRAT  ===== -->
+      <div class="breadcrumb ptb_20">
+        <h1>Shopping Cart</h1>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li class="active">Shopping Cart</li>
+        </ul>
+      </div>
+      <!-- =====  BREADCRUMB END===== -->
+      <div class="text-center">
+
+      <img src="{% static '/images/payment.jpj.png' %}"
+      alt="iPod Classic" title="iPod Classic"
+      >
+      <div class="text-succees">Payment Succesfull...!!!</div>
+      <div class="text-succees">Want to Track Order</div>
+      <a href="/order/" class="btn mtb_20">Track Order</a>
+    
+    </div>
+    </div>
+  </div>
+</div>
+<div id="brand_carouse" class="ptb_30 text-center">
+  <div class="type-01">
+    <div class="heading-part mb_20 ">
+      <h2 class="main_title">Brand Logo</h2>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="brand owl-carousel ptb_20">
+
+          {% for fm in all_scat %}
+          <div class="item text-center"> <a href="{% url 'filter_scat' fm.id %}"><img src="{{fm.image.url}}"
+                alt="Disney" class="img-responsive" /></a> </div>
+          {% endfor %}
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endif %}
+  
+
+{% endblock body %}

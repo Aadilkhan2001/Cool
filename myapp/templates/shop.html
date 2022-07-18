@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Shop |
+{% endblock title %}
+
+
+{% block body %}
+<div class="container">
+    <div class="row ">
+        <div id="column-left" class="col-sm-4 col-md-4 col-lg-3 ">
+            <div id="category-menu" class="navbar collapse  mb_40">
+                <div class="nav-responsive">
+                    <ul class="nav  main-navigation collapse in">
+                        <li><a href="#">Appliances</a></li>
+                        <li><a href="#">Mobile Phones</a></li>
+                        <li><a href="#">Tablet PC & Accessories</a></li>
+                        <li><a href="#">Consumer Electronics</a></li>
+                        <li><a href="#">Computers & Networking</a></li>
+                        <li><a href="#">Electrical & Tools</a></li>
+                        <li><a href="#">Apparel</a></li>
+                        <li><a href="#">Bags & Shoes</a></li>
+                        <li><a href="#">Toys & Hobbies</a></li>
+                        <li><a href="#">Watches & Jewelry</a></li>
+                        <li><a href="#">Home & Garden</a></li>
+                        <li><a href="#">Health & Beauty</a></li>
+                        <li><a href="#">Outdoors & Sports</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="filter left-sidebar-widget mb_50">
+                <div class="heading-part mtb_20 ">
+                    <h2 class="main_title">Glasses</h2>
+                </div>
+                <div class="filter-block">
+
+                    <ul>
+                        <a href="/shop/">
+                            <li>All Product</li>
+                        </a>
+                        {% for fm in all_mcat %}
+                        <a href="{% url 'filter_mcat' fm.id %}">
+                            <li>{{fm.name}}</li>
+                        </a>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="filter left-sidebar-widget mb_50">
+                <div class="heading-part mtb_20 ">
+                    <h2 class="main_title">Brands</h2>
+                </div>
+                <div class="filter-block">
+
+                    <ul>
+                        {% for fm in all_scat %}
+                        <a href="{% url 'filter_scat' fm.id %}">
+                            <li>{{fm.name}}</li>
+                        </a>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="left_banner left-sidebar-widget mb_50"> <a href="#"><img src="{% static 'images/left1.jpg' %}"
+                        alt="Left Banner" class="img-responsive" /></a> </div>
+            
+        </div>
+        <div class="col-sm-8 col-md-8 col-lg-9 mtb_30">
+            <!-- =====  BANNER STRAT  ===== -->
+            <div class="breadcrumb ptb_20">
+                <h1>Products</h1>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li class="active">Products</li>
+                </ul>
+            </div>
+            <!-- =====  BREADCRUMB END===== -->
+            <div class="category-page-wrapper mb_30">
+                <div class="col-xs-5 sort-wrapper">
+                    <label class="control-label" for="input-sort">Sort By :</label>
+                    <div class="sort-inner">
+
+                        <form id="sort-list" method="GET">
+                        <select id="input-sort" class="form-control" name="sort"onchange="location = finalurl2();">
+                            <option id='sort' value="/shop/" name='sort' disabled selected hidden>Default</option>
+                            <option id='name_asc' value="name_asc">Name (A - Z)</option>
+                            <option id='name_dsc' value="name_dsc">Name (Z - A)</option>
+                            <option id='price_asc' value="price_asc">Price (Low &gt; High)</option>
+                            <option id='price_dsc' value="price_dsc">Price (High &gt; Low)</option>
+                        </select>
+
+                    </form>
+                    </div>
+                    <span><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                </div>
+                <div class="col-xs-5 page-wrapper">
+                    <label class="control-label" for="input-limit">Showing Result :</label>
+                    <div class="limit">
+                       {{pro_count}} Product
+                    </div>
+                </div>
+                <div class="col-xs-2 text-right list-grid-wrapper">
+                    <div class="btn-group btn-list-grid">
+                        <button type="button" id="list-view" class="btn btn-default list-view"></button>
+                        <button type="button" id="grid-view" class="btn btn-default grid-view active"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+             
+                {% for fm in all_prod %}
+                
+                <div class="product-layout product-grid  col-lg-3 col-md-4 col-xs-6">
+                    <div class="grid-item">
+                        <div class="product-thumb clearfix mb_30">
+                            <div class="image product-imageblock"> <a href="{% url 'proddata' fm.id %}"> <img
+                                        style="height: 228px;width: 228px;" data-name="product_image"
+                                        src="{{fm.image.url}}" alt="iPod Classic" title="iPod Classic"
+                                        class="img-responsive" /> <img style="height: 228px;width: 228px;"
+                                        src="{{fm.image1.url}}" alt="iPod Classic" title="iPod Classic"
+                                        class="img-responsive" /> </a> </div>
+                            <div class="caption product-detail text-left">
+                                <h6 data-name="product_name" class="product-name mt_20"><a href="{% url 'proddata' fm.id %}"
+                                        title="Casual Shirt With Ruffle Hem">{{fm|truncatewords:5}}</a>
+                                </h6>
+
+                                <span class="price">₹{{fm.sell_price}}</span>
+                                <p class="product-desc mt_10 mb_10">{{fm.description_para}}</p>
+                                <p class="product-desc mt_10 mb_10">{{fm.description_para1}}</p>
+                                <p class="product-desc mt_10 mb_10">{{fm.description_para2}}</p>
+                                <p class="product-desc mt_10 mb_10">{{fm.description_para3}}</p>
+                                <p class="product-desc mt_10 mb_40">{{fm.description_para4}}</p>
+                                <div class="button-group text-center">
+                                    <a class ="add-to-cart" href="{% url 'add_cart' fm.id %}"></a>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+         
+                {% endfor %}
+
+            </div>
+            <div class="pagination-nav text-center mt_50">
+                <ul>
+                    {% if all_prod.has_previous %}
+                    <li>
+                        <a class="previous" href="?page={{all_prod.previous_page_number}}&ok=#ok"><i
+                                class="fas fa-angle-double-left"></i></a>
+                    </li>
+                    {% endif %}
+
+                    {% for pg in all_prod.paginator.page_range %}
+                    {% if all_prod.number == pg %}
+                    <li class="active">
+                        <a href="?page={{pg}}&ok=#ok" >{{pg}}</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="?page={{pg}}&ok=#ok">{{pg}}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if all_prod.has_next %}
+                    <li>
+                        <a class="next" href="?page={{all_prod.next_page_number}}&ok=#ok"><i
+                                class="fas fa-angle-double-right"></i></a>
+                    </li>
+                        
+                    {% endif %}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="brand_carouse" class="ptb_30 text-center">
+        <div class="type-01">
+            <div class="heading-part mb_20 ">
+                <h2 class="main_title">Brand Logo</h2>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="brand owl-carousel ptb_20">
+
+                        {% for fm in all_scat %}
+
+                        <div class="item text-center"> <a href="{% url 'filter_scat' fm.id %}"><img
+                                    src="{{fm.image.url}}" alt="Disney" class="img-responsive" /></a> </div>
+
+                        {% endfor %}
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function get(name) {
+      if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))  //location.search give query sling part
+        return decodeURIComponent(name[1]);
+    }
+  
+    if(get('sort'))
+    document.getElementById('sort').innerHTML =document.getElementById(get('sort')).innerHTML;
+    function finalurl2() {
+    var url = new URL(window.location.href);
+    var search_params = url.searchParams;
+    search_params.set('sort', document.getElementById("input-sort").value);
+    url.search = search_params.toString();
+    var new_url = url.toString();
+    return new_url
+  }
+    
+    
+
+    
+
+   
+  </script>
+{% endblock body %}
