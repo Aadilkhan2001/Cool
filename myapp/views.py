@@ -1,5 +1,4 @@
-from itertools import product
-from unicodedata import name
+import imp
 from django.contrib.auth import authenticate, login, logout
 from .models import *
 from django.contrib import messages
@@ -7,8 +6,8 @@ from myapp.form import ChangePassForm, CustomerAddressForm, LogInForm, UserCForm
 from django.shortcuts import redirect, render
 from .models import Cart, MaincategoryModel, ProductModels, SubcategoryModel
 from django.core.paginator import Paginator
-from myapp.context_processor import data
 import razorpay
+from django.conf import settings
 
 
 # Rendering Home Page
@@ -228,7 +227,7 @@ def OnlinePaymentView(request):
             qua = i.quantity
             Order(user=request.user, product=item,
                       quantity=qua, customer=customer_data).save()
-        client = razorpay.Client(auth=("rzp_test_0gGp3unTKlboNp", "RkJWX03vTlvcfsRF9R56ahj4"))
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY,settings.RAZORPAY_SECRET ))
         payment = client.order.create({'amount':(grand_total)*100, 'currency': 'INR','payment_capture': '1'})
         cart_items.delete()
     else:
@@ -243,7 +242,7 @@ def OnlinePaymentView(request):
             sub_total += (i.product_total)
 
         grand_total += ((sub_total+shipping_charge+GST_price))
-        client = razorpay.Client(auth=("rzp_test_0gGp3unTKlboNp", "RkJWX03vTlvcfsRF9R56ahj4"))
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY,settings.RAZORPAY_SECRET ))
         payment = client.order.create({'amount':(grand_total)*100, 'currency': 'INR','payment_capture': '1'})
     context = {'form1': form,'payment':payment}
     return render(request,'onlinepay.html',context)
