@@ -6,9 +6,13 @@ from .form import *
 
 urlpatterns = [
     path('',HomeView),
-    path('checkout/',CheckoutView),
     path('order/',OrderView),
     path('about/',AboutView),
+
+    #payment related
+    path('checkout/',CheckoutView),
+    path('createorderrazorpay/',Create_RazorPayOrder),
+    path('fail/',PaymentFailedView),
    
 
     #Shop Related urls
@@ -23,15 +27,13 @@ urlpatterns = [
     path('update_cart/<int:id>',updte_cart,name='update_quantity'),
     path('remove_cart/<int:id>',remove_cart,name='remove_cart'),
     
-   
+    #authentication related urls
     path('register/',RegisterView),
     path('login/',LoginPageView),
     path('edit/',EditPageView),
     path('changepass/',PassChangeView), 
     path('logout/',LogOutView),
     path('address/',AdressView),
-    path('onlinepay/',OnlinePaymentView),
-
 
 
     #Password Reset

@@ -1,5 +1,5 @@
-import imp
 from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
 from .models import *
 from django.contrib import messages
 from myapp.form import ChangePassForm, CustomerAddressForm, LogInForm, UserCForm, UserProfileChangeForm
@@ -8,8 +8,8 @@ from .models import Cart, MaincategoryModel, ProductModels, SubcategoryModel
 from django.core.paginator import Paginator
 import razorpay
 from django.conf import settings
-
-
+from .context_processor import data
+import json
 # Rendering Home Page
 def HomeView(request):
     all_product = ProductModels.objects.all()
@@ -17,8 +17,6 @@ def HomeView(request):
     return render(request, 'index.html', context)
 
 # product detail page rendering
-
-
 def Product_detail(request, id):
     get_product = ProductModels.objects.get(id=id)
     if request.method == 'POST':
@@ -32,12 +30,6 @@ def Product_detail(request, id):
             review=review,
             review_status=rates
         ).save()
-    # total_review=0
-    # get_review=ReviewModel.objects.filter(product=id)
-    # count_review=get_review.count()
-    # for i in get_review:
-    #     total_review+=i.review_status
-    # average_review=round(total_review/count_review)
     context = {'get_product': get_product}
     return render(request, 'product_detail_page.html', context)
 
@@ -186,8 +178,17 @@ def remove_cart(request, id):
         get_cart.delete()
     return redirect('/cart/')
 
+def Create_RazorPayOrder(request):
+    context_processor_data=data(request)
+    grand_total=context_processor_data['grand']
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY,settings.RAZORPAY_SECRET ))
+    order_data_razorpay = client.order.create({'amount':(grand_total)*100, 'currency': 'INR','payment_capture': '1'})
+    return JsonResponse(order_data_razorpay)
 
-def CheckoutView(request):
+def PaymentFailedView(request):
+    return render(request,'failed.html')
+
+def CheckoutView(request):          
     address = CustomerModel.objects.filter(user=request.user)
     form = CustomerAddressForm()
     if request.method == 'POST':
@@ -200,52 +201,10 @@ def CheckoutView(request):
             Order(user=request.user, product=item,
                   quantity=qua, customer=customer_data).save()
         cart_items.delete()
-    context = {'address': address, 'form1': form}
+        return redirect('/order/')
+    context = {'address': address, 'form1': form,'razorpay_key':settings.RAZORPAY_KEY}
     return render(request, 'checkout.html', context)
 
-
-def OnlinePaymentView(request):
-    form=CustomerModel.objects.filter(user=request.user)
-    if request.method == 'POST':
-        cust_id = request.POST['customer']
-        cart_items = Cart.objects.filter(user=request.user)
-        customer_data = CustomerModel.objects.get(id=cust_id)
-        sub_total = 0
-        shipping_charge = 70
-        GST = 10
-        grand_total = 0
-        GST_price = 0
-
-        for i in cart_items:
-            GST_price += ((i.product_total*GST)/100)
-            sub_total += (i.product_total)
-
-        grand_total += ((sub_total+shipping_charge+GST_price))
-
-        for i in cart_items:
-            item = i.product
-            qua = i.quantity
-            Order(user=request.user, product=item,
-                      quantity=qua, customer=customer_data).save()
-        client = razorpay.Client(auth=(settings.RAZORPAY_KEY,settings.RAZORPAY_SECRET ))
-        payment = client.order.create({'amount':(grand_total)*100, 'currency': 'INR','payment_capture': '1'})
-        cart_items.delete()
-    else:
-        cart_items = Cart.objects.filter(user=request.user)
-        sub_total = 0
-        shipping_charge = 70
-        GST = 10
-        grand_total = 0
-        GST_price = 0
-        for i in cart_items:
-            GST_price += ((i.product_total*GST)/100)
-            sub_total += (i.product_total)
-
-        grand_total += ((sub_total+shipping_charge+GST_price))
-        client = razorpay.Client(auth=(settings.RAZORPAY_KEY,settings.RAZORPAY_SECRET ))
-        payment = client.order.create({'amount':(grand_total)*100, 'currency': 'INR','payment_capture': '1'})
-    context = {'form1': form,'payment':payment}
-    return render(request,'onlinepay.html',context)
 
 def OrderView(request):
     order=Order.objects.filter(user=request.user).reverse()
@@ -253,8 +212,6 @@ def OrderView(request):
     return render(request,'order.html',context)
 
 # Login Logic
-
-
 def LoginPageView(request):
     form = LogInForm()
     if request.method == 'POST':

@@ -205,6 +205,9 @@ Shop |
         </div>
     </div>
 </div>
+{% endblock body %}
+
+{% block js %}
 <script>
     function get(name) {
       if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))  //location.search give query sling part
@@ -228,4 +231,4 @@ Shop |
 
    
   </script>
-{% endblock body %}
+{% endblock js %}

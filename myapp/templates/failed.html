@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+ 
+{% block title %}
+Failed |
+{% endblock title %}
+    
+{% block body %}
+<div class="container">
+    <div class="row ">
+      <div class="col-sm-12 col-md-12 col-lg-12 mtb_30">
+        <!-- =====  BANNER STRAT  ===== -->
+        <div class="breadcrumb ptb_20">
+          <h1>Payment Status</h1>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li class="active">Payment Status</li>
+          </ul>
+        </div>
+        <!-- =====  BREADCRUMB END===== -->
+        <div class="text-center">
+  
+          <img src="https://png.pngtree.com/png-vector/20190507/ourmid/pngtree-vector-cancel-icon-png-image_1025725.jpg" alt="iPod Classic" title="iPod Classic">
+          <div class="text-danger">Oops payment failed due to some reason plesae retry after sometime...!!!</div>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="brand_carouse" class="ptb_30 text-center">
+    <div class="type-01">
+      <div class="heading-part mb_20 ">
+        <h2 class="main_title">Brand Logo</h2>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="brand owl-carousel ptb_20">
+  
+            {% for fm in all_scat %}
+            <div class="item text-center"> <a href="{% url 'filter_scat' fm.id %}"><img src="{{fm.image.url}}"
+                  alt="Disney" class="img-responsive" /></a> </div>
+            {% endfor %}
+  
+  
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock body %}

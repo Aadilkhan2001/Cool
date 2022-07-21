@@ -25,7 +25,8 @@ Checkout |
       <div class="panel-group mt_20" id="accordion">
         <div class="panel panel-default  ">
           <div class="panel-heading">
-            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Step 1:
+            <h4 class="panel-title"> <a id='pannel1' data-toggle="collapse" data-parent="#accordion"
+                href="#collapseOne">Step 1:
                 Select Address <i class="fa fa-caret-down"></i></a></h4>
           </div>
           <div id="collapseOne" class="panel-collapse collapse in">
@@ -48,19 +49,19 @@ Checkout |
                       <div class="panel-body">
                         <div class='row'>
                           <div clas="col-sm-6">
-                            <form  method="POST">
+                            <form method="POST" id="orderform">
                               {% csrf_token %}
-                            <div class="radio">
-                              <label>
-                                <input type="radio" value="{{fm.id}}" name="customer">
-                                {{fm.ccname}},{{fm.cc_add}},{{fm.add1}},{{fm.add2}},{{fm.city}}-{{fm.zip_code}},{{fm.state}},{{fm.country}}.</label>
-                            </div>
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" id="customer-id" value="{{fm.id}}" name="customer" required />
+                                  {{fm.ccname}},{{fm.cc_add}},{{fm.add1}},{{fm.add2}},{{fm.city}}-{{fm.zip_code}},{{fm.state}},{{fm.country}}.</label>
+                              </div>
                           </div>
 
                         </div>
 
                       </div>
-                    
+
                     </div>
 
                   </div>
@@ -75,21 +76,21 @@ Checkout |
                       <div class="panel-body">
                         <form action="/address/" method="POST">
                           {% csrf_token %}
-                        {% for fm in form1 %}
-                        <div class="text-center">
+                          {% for fm in form1 %}
+                          <div class="text-center">
                             <div class="form-group">
                               {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>
                             </div>
-                        </div>
-                        {% endfor %}
-                        <div class="form-group">
-                          <div class="row">
-                            <div class="col-sm-12">
-                              <button type="submit" class="form-control btn btn-block">Add Address</button>
+                          </div>
+                          {% endfor %}
+                          <div class="form-group">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <button type="submit" class="form-control btn btn-block">Add Address</button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </form>
+                        </form>
                       </div>
 
 
@@ -100,14 +101,14 @@ Checkout |
 
                   {% endif %}
 
-                  
+
                   {% if address %}
                   <div class="text text-center">
                     <a class="btn mtb_10" href="/address/">Add New Adress</a>
                   </div>
-                    
+
                   {% endif %}
-                    
+
                   <div class="text text-center">
                     <a class="btn mtb_10" data-toggle="collapse" data-parent="#accordion"
                       href="#collapsesix">continue</a>
@@ -126,7 +127,7 @@ Checkout |
           </div>
           <div id="collapsesix" class="panel-collapse collapse">
             <div class="panel-body">
-             <div class="table-responsive">
+              <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                   <thead>
                     <tr>
@@ -138,10 +139,11 @@ Checkout |
                     </tr>
                   </thead>
                   <tbody>
-                    
+
                     {% for fm in cart_items %}
                     <tr>
-                      <td class="text-center"><a href="{{fm.product.image.url}}"><img style="height: 75px;width: 75px;" src="{{fm.product.image.url}}" alt="alt"></a>
+                      <td class="text-center"><a href="{{fm.product.image.url}}"><img style="height: 75px;width: 75px;"
+                            src="{{fm.product.image.url}}" alt="alt"></a>
                       </td>
                       <td class="text-left">{{fm.product}}</td>
                       <td class="text-right">₹{{fm.product.sell_price}}</td>
@@ -149,8 +151,8 @@ Checkout |
                       <td class="text-right">₹{{fm.product_total}}</td>
                     </tr>
                     {% endfor %}
-                      
-                    
+
+
                   </tbody>
                   <tfoot>
                     <tr>
@@ -172,7 +174,7 @@ Checkout |
                   </tfoot>
                 </table>
               </div>
-           
+
               <div class="buttons">
                 <div class="pull-right">
                   <a class="btn" data-toggle="collapse" data-parent="#accordion" href="#collapsefive">continue</a>
@@ -190,22 +192,16 @@ Checkout |
             <div class="panel-body">
               <div class="text text-center">
                 <p>Please select the preferred payment method to use on this order.</p>
-           
-               
-                <button name="cashon" class="btn mtb_20" type="submit">Cash On Delivery</button>
-             
-                <a href="/onlinepay/"  class="btn mtb_20" type="submit">Online Payment </a>
+
+
+                <button name="cashon" id='cashon' class="btn mtb_20" type="submit">Cash On Delivery</button>
+                <button type="submit" id='rzp-button1' class="btn mtb_20">pay now</button>
               </form>
-            
-           
-                  
-              
+
+
+
               </div>
-              <div class="text text-center">
-                <div class="form-group">
-                <button class="btn mtb_20" type="submit">Confirm Order</button>
-                </div>
-              </div>
+
             </div>
           </div>
         </div>
@@ -261,6 +257,79 @@ Checkout |
 </div>
 </div>
 {% endif %}
-  
+
 
 {% endblock body %}
+
+
+{% block js %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+
+    document.getElementById('cashon').onclick=function(e){
+      if ('input[name==customer]:checked' != true) {
+      let pannel = document.getElementById('collapseOne');
+      pannel.classList.add('in');
+      }
+    }
+    
+      document.getElementById('rzp-button1').onclick=(function(e){  
+      if (document.getElementById('customer-id').checked != true) {
+      let pannel = document.getElementById('collapseOne');
+      pannel.classList.add('in');
+      //Below code is way to show a error manually in using html validation without submitting a form
+      // let radio_buttton = document.getElementById('customer-id');
+      // radio_buttton.setAttribute('aria-invalid','true');
+      // radio_buttton.reportValidity();
+      }
+      else{
+        e.preventDefault();
+        Request_create_order();
+      }
+       
+      });
+      
+    
+  function Request_create_order() {
+    let xmlhttp;
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET', 'http://127.0.0.1:8000/createorderrazorpay/',true);
+ 
+    xmlhttp.onreadystatechange = function () {
+      if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {
+        let response_data = JSON.parse(xmlhttp.responseText);
+        let amount = '{{grand}}' * 100;
+        let options = {
+          "key": "{{razorpay_key}}", 
+          "amount": amount,
+          "name":'COOLS',
+          "description":"Lets be cool!!",
+          "image":"{% static 'images/logo.png' %}",
+          "currency": "INR",
+          "order_id":response_data['id'],
+          "handler": function (response) {
+            document.getElementById('orderform').submit();
+          },
+          "prefill": {
+            "name": "",
+            "email": "",
+            "contact": ""
+          },
+          "theme": {
+            "color": "#f44336"
+          }
+        };
+        let rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response) {
+          console.log('failed');
+          location.href='http://127.0.0.1:8000/fail/';
+        });
+        rzp1.open();
+      }
+    }
+    xmlhttp.send();
+  }
+
+</script>
+{% endblock js %}
